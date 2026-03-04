@@ -63,3 +63,4 @@ def extract_features(files):
         features.append(feat)
 
     return np.array(features), filenames, file_types
+

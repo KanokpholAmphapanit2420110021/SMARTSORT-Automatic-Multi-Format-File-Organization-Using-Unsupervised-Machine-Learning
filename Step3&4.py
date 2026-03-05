@@ -63,7 +63,7 @@ def extract_features(files):
         features.append(feat)
 
     return np.array(features), filenames, file_types
-# --- STEP 3 & 4: CLUSTERING & EVALUATION (REVISED POINT 1) ---
+# --- STEP 3 & 4: CLUSTERING & EVALUATION ---
 def cluster_and_evaluate(files, num_clusters, model_type):
     if not files or len(files) < 2:
         return pd.DataFrame(), "Needs at least 2 files", "N/A", None, None, None
@@ -75,7 +75,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     scaler = StandardScaler()
     X = scaler.fit_transform(X_raw)
 
-    # REVISED POINT 1: Safe Auto-Adjust k Logic
+    # Auto-Adjust k Logic
     # Requirements: k must be < n_samples for valid silhouette/db metrics
     k = num_clusters
     adjustment_note = ""
@@ -98,7 +98,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
 
     labels = model.fit_predict(X)
 
-    # REVISED POINT 1: Metric Calculation Safety
+    # Metric Calculation 
     metric_info = f"Model: {model_type} | k={k}{adjustment_note} | "
     sil_score = ""
     db_score = ""

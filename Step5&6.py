@@ -73,25 +73,26 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     X_raw, filenames, file_types = extract_features(files)
     n_samples = len(X_raw)
 
-    # Scaling Features for distance-based algorithms
+    # Scaling Features 
     scaler = StandardScaler()
     X = scaler.fit_transform(X_raw)
 
-    # Safe Auto-Adjust k Logic: k must be < n_samples for metrics
+    # Auto-Adjust k Logic
+    # Requirements: k must be < n_samples for valid silhouette/db metrics
     k = num_clusters
     adjustment_note = ""
 
     if k >= n_samples:
-        k = n_samples - 1
+        k = n_samples - 1   # Auto-reduce k to satisfy k < n_samples
         adjustment_note = f" (Auto-adjusted from {num_clusters} to {k})"
 
-    if k < 2: k = 2 # Minimum requirement for clustering
+    if k < 2: k = 2 # Ensure minimum 2 clusters
 
-    # Feature Variance Check to prevent math errors
+    # Variance Check
     if np.all(np.isclose(X, X[0, :])):
         return pd.DataFrame({"Filename": filenames, "Cluster": [0]*n_samples}), "Variance Error", "Variance Error", None, None, None
 
-    # Clustering Model Initialization
+    # Clustering Model with fixed random_state for scientific practice
     if model_type == "K-Means":
         model = KMeans(n_clusters=k, random_state=42, n_init=10)
     else:
@@ -99,11 +100,12 @@ def cluster_and_evaluate(files, num_clusters, model_type):
 
     labels = model.fit_predict(X)
 
-    # Metric Calculation Safety
+    # Metric Calculation 
     metric_info = f"Model: {model_type} | k={k}{adjustment_note} | "
     sil_score = ""
     db_score = ""
-
+    
+    # Needs at least 3 samples and k < samples for meaningful metrics
     if n_samples < 3:
         status_msg = "N/A (insufficient samples; needs >=3)"
         sil_score = f"{metric_info}{status_msg}"
@@ -116,18 +118,19 @@ def cluster_and_evaluate(files, num_clusters, model_type):
         sil_score = f"{metric_info}{status_msg}"
         db_score = f"{metric_info}{status_msg}"
 
-    # PCA Visualization with labels and grid
+    # PCA Plot with reproducibility
     pca = PCA(n_components=2, random_state=42)
     X_2d = pca.fit_transform(X)
     fig_pca, ax = plt.subplots(figsize=(6, 4))
     scatter = ax.scatter(X_2d[:, 0], X_2d[:, 1], c=labels, cmap="tab10")
-
+    
+    # Figure Labels and Grid for report correctness
     ax.set_xlabel("Principal Component 1")
     ax.set_ylabel("Principal Component 2")
     ax.grid(True, linestyle='--', alpha=0.5)
     ax.set_title(f"PCA Visualization ({model_type})")
 
-    # Filename annotation for clarity
+    # Filename annotation (Truncated for long names)
     if n_samples <= 10:
         for i, txt in enumerate(filenames):
             short = (txt[:25] + "...") if len(txt) > 28 else txt
@@ -136,7 +139,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     plt.colorbar(scatter)
     plt.tight_layout()
 
-    # EDA Distribution Plots
+    # EDA Analysis Plots
     fig_eda1, ax_eda1 = plt.subplots(figsize=(5, 3))
     pd.Series(file_types).value_counts().plot(kind='bar', ax=ax_eda1)
     ax_eda1.set_title("EDA: Input Data Distribution")

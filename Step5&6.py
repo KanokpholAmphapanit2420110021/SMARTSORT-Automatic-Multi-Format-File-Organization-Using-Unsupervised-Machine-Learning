@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
-import time # Import time for safety delays and unique naming
+import time 
 import matplotlib.pyplot as plt
 from PIL import Image
 import PyPDF2

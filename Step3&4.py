@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
+import time 
 import matplotlib.pyplot as plt
 from PIL import Image
 import PyPDF2
@@ -63,6 +64,7 @@ def extract_features(files):
         features.append(feat)
 
     return np.array(features), filenames, file_types
+
 # --- STEP 3 & 4: CLUSTERING & EVALUATION ---
 def cluster_and_evaluate(files, num_clusters, model_type):
     if not files or len(files) < 2:
@@ -71,7 +73,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     X_raw, filenames, file_types = extract_features(files)
     n_samples = len(X_raw)
 
-    # Scaling Features
+    # Scaling Features 
     scaler = StandardScaler()
     X = scaler.fit_transform(X_raw)
 
@@ -81,7 +83,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     adjustment_note = ""
 
     if k >= n_samples:
-        k = n_samples - 1 # Auto-reduce k to satisfy k < n_samples
+        k = n_samples - 1   # Auto-reduce k to satisfy k < n_samples
         adjustment_note = f" (Auto-adjusted from {num_clusters} to {k})"
 
     if k < 2: k = 2 # Ensure minimum 2 clusters
@@ -102,7 +104,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     metric_info = f"Model: {model_type} | k={k}{adjustment_note} | "
     sil_score = ""
     db_score = ""
-
+    
     # Needs at least 3 samples and k < samples for meaningful metrics
     if n_samples < 3:
         status_msg = "N/A (insufficient samples; needs >=3)"
@@ -121,7 +123,7 @@ def cluster_and_evaluate(files, num_clusters, model_type):
     X_2d = pca.fit_transform(X)
     fig_pca, ax = plt.subplots(figsize=(6, 4))
     scatter = ax.scatter(X_2d[:, 0], X_2d[:, 1], c=labels, cmap="tab10")
-
+    
     # Figure Labels and Grid for report correctness
     ax.set_xlabel("Principal Component 1")
     ax.set_ylabel("Principal Component 2")

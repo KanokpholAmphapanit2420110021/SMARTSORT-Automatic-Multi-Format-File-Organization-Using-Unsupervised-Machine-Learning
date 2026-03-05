@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import shutil
+import time 
 import matplotlib.pyplot as plt
 from PIL import Image
 import PyPDF2
@@ -63,7 +64,6 @@ def extract_features(files):
         features.append(feat)
 
     return np.array(features), filenames, file_types
-
 
 
 

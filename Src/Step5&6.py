@@ -6,7 +6,7 @@ import shutil
 import time 
 import matplotlib.pyplot as plt
 from PIL import Image
-import PyPDF2
+import PyPDF2 
 
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.metrics import silhouette_score, davies_bouldin_score

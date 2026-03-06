@@ -227,18 +227,15 @@ results/
 
 # Project Structure
 
-
-SMARTSORT/
-│
-├── data/ # Input datasets
-├── results/ # Generated clustering outputs
-├── src/ # Source code
-│ ├── Step1&2.py # Feature extraction
-│ ├── Step3&4.py # Clustering and evaluation
-│ └── Step5&6.py # Full application (UI + sorting)
-│
-├── README.md
-└── requirements.txt
+- **SMARTSORT/**
+  - **data/** – Input datasets
+  - **results/** – Generated clustering outputs
+  - **src/** – Source code
+    - `Step1&2.py` – Feature extraction
+    - `Step3&4.py` – Clustering and evaluation
+    - `Step5&6.py` – Full application (UI + sorting)
+  - `README.md`
+  - `requirements.txt`
 
 
 ---

@@ -67,6 +67,12 @@ Used to build the **interactive web interface**.
 ### Pandas & NumPy
 Used for **data processing and numerical computation**.
 
+### Time
+
+Used for generating timestamps and managing time-related operations.
+
+In this project, the `time` module is used to create unique filenames when exporting the sorted ZIP results, ensuring that each run of the program produces a different output file.
+
 ### Scikit-Learn
 Used for:
 - K-Means clustering

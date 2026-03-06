@@ -228,7 +228,7 @@ results/
 # Project Structure
 
 
-SMARTSORT
+SMARTSORT/
 │
 ├── data/ # Input datasets
 ├── results/ # Generated clustering outputs

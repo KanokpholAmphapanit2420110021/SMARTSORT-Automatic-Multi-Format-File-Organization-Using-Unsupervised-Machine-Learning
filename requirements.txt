@@ -3,5 +3,5 @@ pandas
 numpy
 matplotlib
 Pillow
-PyPDF2
+PyPDF2 
 scikit-learn
